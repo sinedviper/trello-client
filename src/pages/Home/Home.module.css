@@ -1,0 +1,188 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 150px 300px;
+}
+
+.top {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  border-radius: 10px;
+  padding: 40px;
+  justify-content: center;
+  width: 100%;
+  max-width: 450px;
+  color: var(--light);
+  background-color: var(--green);
+  transition: all 0.3s;
+  box-shadow: -1px 3px 0 var(--dark);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.title {
+  cursor: pointer;
+  font-size: 25px;
+}
+
+.openTitle {
+  cursor: default;
+}
+
+.createBoard {
+  font-size: 22px;
+  border-left: 2px solid var(--dark);
+  display: none;
+  flex-direction: column;
+  padding: 0 30px;
+  gap: 20px;
+}
+
+.createBoard input {
+  padding: 10px 20px;
+  font-size: 15px;
+  border-radius: 5px;
+}
+
+.openBoard {
+  display: flex;
+}
+
+.openCreate {
+  max-width: 650px;
+}
+
+.createButton {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: var(--blue);
+  color: var(--light);
+  cursor: pointer;
+}
+
+.cancel {
+  background-color: inherit;
+  color: var(--dark);
+  font-weight: 600;
+}
+
+.board {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  background-color: var(--light);
+  font-size: 20px;
+}
+
+.board div {
+  padding: 30px;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.name {
+  color: var(--dark);
+  text-decoration: none;
+}
+
+.remove {
+  position: absolute;
+  bottom: 25px;
+  right: -15px;
+  width: 30px;
+  cursor: pointer;
+}
+
+.bottom {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  width: 100%;
+}
+
+@media screen and (max-width: 1800px) {
+  .wrapper {
+    padding: 150px;
+  }
+}
+
+@media screen and (max-width: 1600px) {
+  .wrapper {
+    padding: 100px;
+  }
+}
+
+@media screen and (max-width: 1400px) {
+  .bottom {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .bottom {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .createBoard {
+    border-left: none;
+    border-top: 2px solid var(--dark);
+    padding: 20px 0;
+  }
+  .wrapper {
+    padding: 50px;
+  }
+
+  .top {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+  }
+
+  .board {
+    max-width: none;
+  }
+
+  .bottom {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .wrapper {
+    padding: 20px;
+  }
+
+  .top {
+    padding: 20px;
+    white-space: initial;
+    overflow: visible;
+  }
+  .createBoard {
+    word-break: break-all;
+  }
+
+  .board {
+    max-width: none;
+  }
+
+  .bottom {
+    grid-template-columns: 1fr;
+  }
+  .create {
+    word-break: break-all;
+  }
+}
