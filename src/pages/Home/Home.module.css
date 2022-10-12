@@ -99,8 +99,8 @@
 
 .remove {
   position: absolute;
-  bottom: 25px;
-  right: -15px;
+  top: 5px;
+  right: 5px;
   width: 30px;
   cursor: pointer;
 }

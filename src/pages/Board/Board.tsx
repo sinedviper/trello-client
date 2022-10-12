@@ -1,134 +1,134 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from "react";
 import cn from "classnames";
 import { Link, useParams } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper";
 
 import { BoardProps } from "./Board.props";
-import { useAppDispatch, useAppSelector } from "../../hooks/useHooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import {
+  fetchBoard,
+  fetchListCreate,
+  fetchListRemove,
+  fetchListUpdate,
+  fetchTodos,
+  fetchTodosCreate,
+  fetchTodosDelete,
   selectBoard,
-  Boards,
-  actionAddListBoard,
-  actionAddTodoList,
-  actionRemoveBoardList,
+  selectTodos,
 } from "../../features";
-import { ReactComponent as Remove } from "./Remove.svg";
 
+import { ReactComponent as Remove } from "./Remove.svg";
 import styles from "./Board.module.css";
+import "swiper/css";
+import "swiper/css/pagination";
 
 export const Board = ({ className, ...props }: BoardProps): JSX.Element => {
-  const [create, setCreate] = useState<string>("");
-  const [list, setList] = useState<string>("");
-  const [open, setOpen] = useState<boolean>(true);
-  const { idBoard } = useParams();
-
+  const { boardId } = useParams();
   const dispatch = useAppDispatch();
-  const data: Boards | undefined = useAppSelector((state) =>
-    selectBoard(state, String(idBoard))
-  );
+
+  const [name, setName] = useState<string>("");
+  const [open, setOpen] = useState<boolean>(true);
+
+  const { board } = useAppSelector(selectBoard);
+  const { todos } = useAppSelector(selectTodos);
 
   const handleCreate = () => {
     setOpen(true);
-    dispatch(actionAddListBoard({ id: idBoard, name: create }));
+    setName("");
+    dispatch(fetchTodosCreate({ boardId, todos: { name, boardId } }));
   };
 
-  const handleCreateList = (e, id: string) => {
+  const handleCreateList = (e, todosId: string) => {
     if (e.key === "Enter")
-      dispatch(actionAddTodoList({ idBoard, idList: id, todo: list }));
+      dispatch(fetchListCreate({ boardId, todosId, name: e.target.value }));
+  };
+
+  const handleUpdateList = (id: string, check: boolean) => {
+    dispatch(fetchListUpdate({ id, check: !check, boardId }));
   };
 
   const handleRemove = (id: string) => {
-    dispatch(actionRemoveBoardList({ idBoard, idList: id }));
+    dispatch(fetchTodosDelete({ id, boardId }));
   };
+
+  const handleRemoveList = (id: string) => {
+    dispatch(fetchListRemove({ id, boardId }));
+  };
+
+  useEffect(() => {
+    dispatch(fetchBoard(String(boardId)));
+    dispatch(fetchTodos(String(boardId)));
+  }, []);
 
   return (
     <div className={cn(className, styles.wrapper)} {...props}>
       <div className={cn(styles.top)}>
-        <h2>Board: {data && data.name}</h2>
+        <h2>Board: {board && board.name}</h2>
         <Link to={`/`} className={styles.back}>
           Back
         </Link>
       </div>
-      <div className={styles.bottom}>
-        {data?.boards &&
-          data.boards.map((obj) => (
-            <div key={obj.id} className={styles.board}>
+      {open ? (
+        <button
+          className={cn(styles.create, {
+            [styles.open]: open === true,
+          })}
+          onClick={() => setOpen(!open)}
+        >
+          Create todo
+        </button>
+      ) : (
+        <div className={styles.create}>
+          <input value={name} onChange={(e) => setName(e.target.value)} />
+          <span>give me a name!</span>
+          <div>
+            <button onClick={() => setOpen(true)}>cancel</button>
+            <button onClick={handleCreate}>create todo</button>
+          </div>
+        </div>
+      )}
+      <Swiper
+        slidesPerView={4}
+        spaceBetween={30}
+        centeredSlides={true}
+        pagination={{
+          clickable: true,
+        }}
+        modules={[Pagination]}
+        className='mySwiper'
+      >
+        {todos &&
+          todos.map((todo) => (
+            <SwiperSlide key={todo.id} className={styles.board}>
               <Remove
                 className={styles.remove}
-                onClick={() => handleRemove(obj.id)}
+                onClick={() => handleRemove(todo.id)}
               />
-              <h3>{obj.name}</h3>
-              <input
-                value={list}
-                onChange={(e) => setList(e.target.value)}
-                onKeyDown={(e) => handleCreateList(e, obj.id)}
-              />
+              <h3>{todo.name}</h3>
+              <input onKeyDown={(e) => handleCreateList(e, todo.id)} />
               <ul>
-                {obj.list.map((lists, index) => (
-                  <li key={index}>{lists}</li>
-                ))}
+                {todo.list &&
+                  todo.list.map((list) => (
+                    <li
+                      key={list.id}
+                      className={cn(styles.list, {
+                        [styles.check]: list.check === true,
+                      })}
+                      onClick={() => handleUpdateList(list.id, list.check)}
+                    >
+                      <Remove
+                        className={styles.removeList}
+                        onClick={() => handleRemoveList(list.id)}
+                      />
+                      {list.name}
+                    </li>
+                  ))}
               </ul>
-            </div>
+            </SwiperSlide>
           ))}
-        {open ? (
-          <button
-            className={cn(styles.create, {
-              [styles.open]: open === true,
-            })}
-            onClick={() => setOpen(!open)}
-          >
-            Create todo
-          </button>
-        ) : (
-          <div className={styles.create}>
-            <input value={create} onChange={(e) => setCreate(e.target.value)} />
-            <span>give me a name!</span>
-            <div>
-              <button onClick={() => setOpen(true)}>cancel</button>
-              <button onClick={handleCreate}>create todo</button>
-            </div>
-          </div>
-        )}
-      </div>
+      </Swiper>
     </div>
   );
 };
-/*
-<p
-          onClick={() => !open && setOpen(!open)}
-          className={cn(styles.title, { [styles.openTitle]: open === true })}
-        >
-          Create a new board
-        </p>
-
-
-
-<div
-  className={cn(styles.createBoard, {
-    [styles.openBoard]: open === true,
-  })}
->
-  <p>What shell we call the board ?</p>
-  <input
-    type='text'
-    value={create}
-    onChange={(e) =>
-      setCreate(e.target.value.length >= 50 ? create : e.target.value)
-    }
-  />
-  <div className={styles.createButton}>
-    <button
-      className={cn(styles.button, styles.cancel)}
-      onClick={() => {
-        setCreate("");
-        setOpen(false);
-      }}
-    >
-      Cancel
-    </button>
-    <button className={styles.button} onClick={handleCreate}>
-      Create
-    </button>
-  </div>
-</div>;
-*/

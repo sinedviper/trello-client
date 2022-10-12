@@ -37,6 +37,7 @@
   width: 300px;
   overflow: hidden;
   border-radius: 10px;
+  margin-bottom: 40px;
   background-color: var(--light);
   font-size: 20px;
   text-overflow: ellipsis;
@@ -47,32 +48,42 @@
   overflow: hidden;
 }
 
-.remove {
+.remove,
+.removeList {
   position: absolute;
-  top: -37px;
+  top: 5px;
   right: 5px;
-  width: 30px;
   cursor: pointer;
 }
 
-.board li {
+.removeList {
+  top: 4px;
+  width: 25px;
+  height: 25px;
+}
+
+.list {
+  position: relative;
   list-style-type: none;
   margin-top: 10px;
-  padding: 5px;
+  padding: 5px 25px 5px 5px;
   background-color: var(--green-light);
   border-radius: 10px;
   color: var(--light);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.check {
+  text-decoration: line-through;
+  background-color: var(--grey);
 }
 
 .bottom {
-  display: flex;
-  gap: 20px;
   width: 100%;
   padding-bottom: 30px;
-  overflow-x: scroll;
 }
 
 .create {
@@ -85,6 +96,7 @@
   background-color: var(--light);
   text-align: center;
   gap: 10px;
+  margin: 0 auto;
 }
 
 .open {

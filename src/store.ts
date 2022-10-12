@@ -1,10 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { reducerBoard } from "./features";
+import { reducerBoards, reducerBoard, reducerTodos } from "./features";
 
 export const store = configureStore({
   reducer: {
-    boards: reducerBoard,
+    boards: reducerBoards,
+    board: reducerBoard,
+    todos: reducerTodos,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export type AppState = ReturnType<typeof store.getState>;

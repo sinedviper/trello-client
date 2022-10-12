@@ -20,7 +20,7 @@ function App() {
       <Router>
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/board/:idBoard' element={<Board />} />
+          <Route path='/board/:boardId' element={<Board />} />
         </Routes>
       </Router>
     </>

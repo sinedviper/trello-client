@@ -1,26 +1,26 @@
-import React, { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from "react";
 import cn from "classnames";
 import { Link } from "react-router-dom";
 
 import { ReactComponent as Remove } from "./Remove.svg";
 import { HomeProps } from "./Home.props";
-import { useAppDispatch, useAppSelector } from "../../hooks/useHooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import {
-  actionAddBoard,
-  actionRemoveBoard,
-  selectAllBoard,
+  actionBoardClear,
+  actionTodosClear,
+  fetchBoards,
+  fetchBoardsCreate,
+  fetchBoardsDelete,
+  selectBoards,
 } from "../../features";
+import { Board } from "../../interfaces";
 
 import styles from "./Home.module.css";
 
-interface data {
-  id: string;
-  name: string;
-}
-
 export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   const dispatch = useAppDispatch();
-  const { board } = useAppSelector(selectAllBoard);
+  const { boards } = useAppSelector(selectBoards);
 
   const [create, setCreate] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
@@ -28,12 +28,18 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   const handleCreate = () => {
     setOpen(false);
     setCreate("");
-    dispatch(actionAddBoard(create));
+    dispatch(fetchBoardsCreate(create));
   };
 
   const handleRemove = (id: string) => {
-    dispatch(actionRemoveBoard(id));
+    dispatch(fetchBoardsDelete(id));
   };
+
+  useEffect(() => {
+    dispatch(fetchBoards());
+    dispatch(actionBoardClear());
+    dispatch(actionTodosClear());
+  }, []);
 
   return (
     <div className={cn(className, styles.wrapper)} {...props}>
@@ -74,19 +80,20 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
         </div>
       </div>
       <div className={styles.bottom}>
-        {board.map((val: data) => (
-          <div key={val.id} className={styles.board}>
-            <div>
-              <Link to={`/board/${val.id}`} className={styles.name}>
-                {val.name}
-              </Link>
+        {boards &&
+          boards.map((board: Board) => (
+            <div key={board.id} className={styles.board}>
+              <div>
+                <Link to={`/board/${board.id}`} className={styles.name}>
+                  {board.name}
+                </Link>
+              </div>
+              <Remove
+                className={styles.remove}
+                onClick={() => handleRemove(board.id)}
+              />
             </div>
-            <Remove
-              className={styles.remove}
-              onClick={() => handleRemove(val.id)}
-            />
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );
