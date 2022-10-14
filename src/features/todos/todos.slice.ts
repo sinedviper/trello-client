@@ -1,13 +1,15 @@
+/* eslint-disable array-callback-return */
+import { updateListTodosId } from "./../../utils/list.utils";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { Todos } from "../../interfaces";
+import { List, Todos } from "../../interfaces";
 import { AppState } from "../../store";
 import {
   getTodos,
   removeTodos,
   createTodos,
   createList,
-  updateList,
+  updateListCheck,
   removeList,
 } from "../../utils";
 
@@ -43,7 +45,7 @@ export const fetchListCreate = createAsyncThunk(
 export const fetchListUpdate = createAsyncThunk(
   "@@todos/list-update",
   async (data: any) => {
-    await updateList(data.id, data.check);
+    await updateListCheck(data.id, data.check);
     return await getTodos(data.boardId);
   }
 );
@@ -52,6 +54,14 @@ export const fetchListRemove = createAsyncThunk(
   "@@todos/list-remove",
   async (data: any) => {
     await removeList(data.id);
+    return await getTodos(data.boardId);
+  }
+);
+
+export const fetchListTodosUpdate = createAsyncThunk(
+  "@@todos/list-updateTodosId",
+  async (data: any) => {
+    await updateListTodosId(data.id, data.todosId);
     return await getTodos(data.boardId);
   }
 );
@@ -74,6 +84,26 @@ const todosSlice = createSlice({
   reducers: {
     actionTodosClear: () => {
       return initialState;
+    },
+    actionListTodosId: (state, action) => {
+      let obj: List | null = null;
+      state.todos.map((todo) => {
+        todo.list = todo.list.filter((list) => {
+          if (list.id === action.payload.id) {
+            list.todosId = action.payload.todosId;
+            obj = list;
+          }
+          return list.id !== action.payload.id;
+        });
+        return todo;
+      });
+      state.todos = state.todos.map((todo) => {
+        if (todo.id === obj?.todosId) {
+          todo.list.push(obj);
+        }
+        return todo;
+      });
+      return state;
     },
   },
   extraReducers: (build) => {
@@ -143,6 +173,19 @@ const todosSlice = createSlice({
         state.error = "";
         state.todos = action.payload as unknown as Todos[];
       })
+      .addCase(fetchListTodosUpdate.pending, (state) => {
+        state.status = "pending";
+        state.error = "";
+      })
+      .addCase(fetchListTodosUpdate.rejected, (state, action) => {
+        state.status = "rejected";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchListTodosUpdate.fulfilled, (state, action) => {
+        state.status = "received";
+        state.error = "";
+        state.todos = action.payload as unknown as Todos[];
+      })
       .addCase(fetchListRemove.pending, (state) => {
         state.status = "pending";
         state.error = "";
@@ -159,7 +202,7 @@ const todosSlice = createSlice({
   },
 });
 
-export const { actionTodosClear } = todosSlice.actions;
+export const { actionTodosClear, actionListTodosId } = todosSlice.actions;
 
 export const reducerTodos = todosSlice.reducer;
 

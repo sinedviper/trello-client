@@ -15,8 +15,18 @@ export const removeList = async (id: string): Promise<void> => {
   await axios.delete(`${api}${links.list.delete}${id}`);
 };
 
-export const updateList = async (id: string, check: boolean): Promise<void> => {
+export const updateListCheck = async (
+  id: string,
+  check: boolean
+): Promise<void> => {
   await axios.patch(`${api}${links.list.update}${id}`, { check });
+};
+
+export const updateListTodosId = async (
+  id: string,
+  todosId: string
+): Promise<void> => {
+  await axios.patch(`${api}${links.list.update}${id}`, { todosId });
 };
 
 export const createList = async (

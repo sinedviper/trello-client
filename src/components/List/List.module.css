@@ -1,0 +1,32 @@
+.remove,
+.removeList {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+}
+
+.removeList {
+  top: 4px;
+  width: 25px;
+  height: 25px;
+}
+
+.list {
+  position: relative;
+  list-style-type: none;
+  margin-top: 10px;
+  padding: 5px 25px 5px 5px;
+  background-color: var(--green-light);
+  border-radius: 10px;
+  color: var(--light);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.check {
+  text-decoration: line-through;
+  background-color: var(--grey);
+}

@@ -1,0 +1,19 @@
+.top {
+  display: flex;
+  justify-content: space-between;
+  border-radius: 10px;
+  padding: 30px;
+  color: var(--light);
+  background-color: var(--green);
+  box-shadow: -1px 3px 0 var(--dark);
+  font-size: 25px;
+}
+
+.top h2 {
+  font-size: 25px;
+}
+
+.back {
+  color: var(--light);
+  text-decoration: none;
+}

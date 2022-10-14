@@ -11,14 +11,12 @@ export const links = {
   todos: {
     create: "todos/create",
     delete: "todos/",
-    deleteAll: "todos/deleteAll/",
     findAll: "todos/findAll/",
   },
   list: {
     create: "list/create",
     update: "list/",
     delete: "list/",
-    deleteAll: "list/deleteAll/",
     find: "list/",
     findAll: "list/findAll/",
   },

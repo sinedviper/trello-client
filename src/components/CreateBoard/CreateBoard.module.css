@@ -1,0 +1,97 @@
+.top {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  border-radius: 10px;
+  padding: 40px;
+  justify-content: center;
+  width: 100%;
+  max-width: 450px;
+  color: var(--light);
+  background-color: var(--green);
+  transition: all 0.3s;
+  box-shadow: -1px 3px 0 var(--dark);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.openCreate {
+  max-width: 650px;
+}
+
+.title {
+  cursor: pointer;
+  font-size: 25px;
+}
+
+.openTitle {
+  cursor: default;
+}
+
+.createBoard {
+  font-size: 22px;
+  border-left: 2px solid var(--dark);
+  display: none;
+  flex-direction: column;
+  padding: 0 30px;
+  gap: 20px;
+}
+
+.createBoard input {
+  padding: 10px 20px;
+  font-size: 15px;
+  border-radius: 5px;
+}
+
+.openBoard {
+  display: flex;
+}
+
+.createButton {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: var(--blue);
+  color: var(--light);
+  cursor: pointer;
+}
+
+.cancel {
+  background-color: inherit;
+  color: var(--dark);
+  font-weight: 600;
+}
+
+@media screen and (max-width: 1000px) {
+  .createBoard {
+    border-left: none;
+    border-top: 2px solid var(--dark);
+    padding: 20px 0;
+  }
+
+  .top {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .createBoard {
+    word-break: break-all;
+  }
+
+  .top {
+    padding: 20px;
+    white-space: initial;
+    overflow: visible;
+  }
+  .createBoard {
+    word-break: break-all;
+  }
+}
